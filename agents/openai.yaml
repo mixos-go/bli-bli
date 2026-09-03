@@ -1,0 +1,4 @@
+interface:
+  display_name: "Blibli Seller API Guide"
+  short_description: "Answer Blibli Seller API structure questions from bundled references first."
+  default_prompt: "Use $blibli-seller-api-guide to confirm this Blibli Seller API structure from references/api/ first."
