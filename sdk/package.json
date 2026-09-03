@@ -1,0 +1,43 @@
+{
+  "name": "@mixos-go/bli-bli-sdk",
+  "version": "1.0.0",
+  "description": "Generated TypeScript SDK for the Blibli Seller API (MTA) - 131 callable APIs / 27 categories",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "generate": "node scripts/generate.cjs",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "smoke": "npm run build && node scripts/smoke.cjs",
+    "prepublishOnly": "npm run generate && npm run build"
+  },
+  "keywords": [
+    "blibli",
+    "seller-api",
+    "mta",
+    "openapi",
+    "sdk",
+    "ecommerce",
+    "indonesia"
+  ],
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "@types/node": "^20.0.0"
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}
