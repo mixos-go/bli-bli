@@ -84,6 +84,39 @@ Jika `signatureKey` disediakan, tiap request menambahkan header:
 Tanpa `signatureKey`, SDK cukup mengirim Basic auth + `Api-Seller-Key` (cocok
 untuk endpoint yang tidak mewajibkan signature).
 
+## Connector multi-seller (key-based, tanpa OAuth)
+
+Blibli **tidak punya OAuth** untuk Seller API saat ini (`seller-api.blibli.com`):
+auth-nya Basic (`clientKey:clientSecret`) + header `Api-Seller-Key` yang
+dibuat per toko di Seller Center. Karena itu connector `BlibliConnector`
+beradaptasi **key-based**: satu instance connector, banyak shop, API-Seller-Key
+disimpan per `shopId` di `TokenStore` dan di-inject ke `BlibliClient` tiap
+`getClient(shopId)`.
+
+```ts
+import { createBlibliConnector, InMemoryTokenStore } from './connector'
+
+const connector = createBlibliConnector({
+  credentials: { clientKey: '...', clientSecret: '...', signatureKey: 'OPTIONAL' },
+  redirectUri: 'https://app.example/cb', // disimpan utk kontrak seragam; tidak terpakai
+  store: new InMemoryTokenStore(),
+  environment: 'production',
+})
+
+// Registrasi seller (pengganti OAuth handleCallback)
+await connector.connect('TOQ-15126', 'API_SELLER_KEY_TOKO_TSB')
+
+// Client untuk satu shop — apiSellerKey otomatis ter-inject
+const client = await connector.getClient('TOQ-15126')
+
+// Method OAuth (buildAuthUrl/handleCallback/refresh) melempar error jelas:
+// Blibli tidak memakai OAuth. Key tidak kedaluwarsa → tidak ada refresh.
+```
+
+> Catatan kontrak: bentuk class/kontrak connector **identik** dengan Shopee/TTS/
+> Lazada (`buildAuthUrl`, `handleCallback`, `refresh`, `getClient`), hanya saja di
+> Blibli tiga method OAuth itu N/A dan digantikan `connect(shopId, apiSellerKey)`.
+
 ## Struktur
 
 ```

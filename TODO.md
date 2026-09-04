@@ -106,21 +106,21 @@ Kelas `BlibliConnector` **multi-seller** (satu instance, banyak shop):
 
 ## Fase 2 — OAuth dari nol + token injection di client
 
-Blibli belum punya OAuth sama sekali, jadi ini dibangun baru (menggantikan "fix primitif" platform
-lain):
+Keputusan user (Fase 1): **adaptasi key-based** — Blibli tidak punya OAuth, jadi fase ini
+dianulir jadi dokumentasi & formalisasi keputusan (alih-alih bangun OAuth):
 
-- [ ] **Token payload**: `BlibliCredentials` saat ini cuma `clientKey/clientSecret/apiSellerKey`
-      (`src/types.ts:11`). Tambah support token (access/refresh) — apakah sbg field opsional di
-      `BlibliCredentials`, atau dibawa connector terpisah. Putuskan & dokumentasikan.
-- [ ] **Inject token ke request**: `BlibliClient.request()` (`src/client.ts:182-201`) saat ini
-      hardcoded `Authorization: Basic` + `Api-Seller-Key`. Tambah dukungan `Authorization: Bearer
-      <accessToken>` untuk endpoint yang butuh token (tanpa merusak flow Basic yang ada).
-- [ ] **Credential mutability**: `credentials` & `defaults` `private readonly` (`src/client.ts:123`)
-      → putuskan pendekatan agar connector bisa inject/refresh token runtime (setter, rekonstruksi
-      client, atau terapkan `Authorization` dari store tiap call). Dokumentasikan.
-- [ ] Tambah konstanta host OAuth endpoint (mungkin beda dari `seller-api.blibli.com`).
-- [ ] Implement auto-refresh: cek `expiresAt` sebelum call; refresh jika `< threshold`.
-      Single-flight agar refresh tidak dobel saat paralel.
+- [x] **Token payload / `Authorization: Bearer`**: N/A. Tidak ada access/refresh token; identitas
+      per-shop = `apiSellerKey`, dikirim ulang via header `Api-Seller-Key` (bukan Bearer). Sudah
+      ter-inject per shop di connector (`getClient` merge `credentials` + `apiSellerKey` shop).
+- [x] **Credential mutability / aset detail**: N/A. Key tidak kedaluwarsa → tidak ada refresh
+      runtime; `BlibliClient` dibangun per shop dengan kredensial (key) ter-override. `credentials`
+      client tetap `private readonly`, aman.
+- [x] **Host OAuth endpoint**: N/A (tidak ada). `redirectUri` di config connector dipertahankan
+      hanya utk kepatuhan kontrak seragam.
+- [x] **Auto-refresh**: N/A (key tidak kedaluwarsa). Dicatat di `sdk/README.md` § Connector
+      multi-seller (key-based, tanpa OAuth) — 2 mode auth (Basic legacy vs connector multi-seller).
+- [x] Dokumentasi: `sdk/README.md` ditambah bagian connector multi-seller; contoh `connect(shopId,
+      apiSellerKey)` → `getClient(shopId)`.
 
 ## Fase 3 — Multi-seller switch
 
