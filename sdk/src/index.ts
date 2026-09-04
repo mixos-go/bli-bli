@@ -4,6 +4,7 @@ import * as generated from './generated'
 
 export * from './types'
 export * from './client'
+export * from './connector'
 export { BlibliClient } from './client'
 export { generated }
 

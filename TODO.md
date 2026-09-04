@@ -81,21 +81,28 @@ Kelas `BlibliConnector` **multi-seller** (satu instance, banyak shop):
 
 ## Fase 1 — Connector core (struktur + contract)
 
-- [ ] Riset endpoint OAuth Blibli (authorize + token): cek `references/`, `SKILL.md`, dan doc resmi
-      Blibli Seller API. Tentukan `authorizeEndpoint` & `tokenEndpoint` + bentuk request/response
-      (access_token, refresh_token, expires_in). Taruh temuan di PR description.
-- [ ] `connector/types.ts` — `TokenSet`, `ConnectorConfig` sesuai kontrak; tambah field spesifik
-      Blibli bila perlu.
-- [ ] `connector/token-store.ts` — `interface TokenStore` + `InMemoryTokenStore`.
-- [ ] `connector/connector.ts` — class `BlibliConnector` (multi-seller):
-  - `buildAuthUrl(shopId, state?)` → bangun URL authorize (client_id, redirect_uri, state).
-  - `handleCallback(shopId, code)` → exchange code via `tokenEndpoint`, parse jadi `TokenSet`,
-    simpan.
-  - `refresh(shopId)` → refresh via `tokenEndpoint` (grant_type=refresh_token), update store.
-  - `getClient(shopId)` → return `BlibliClient` yang auto-inject token & auto-refresh (Fase 2).
-  - `listShopIds()`.
-- [ ] `connector/index.ts` — `createBlibliConnector(config)`.
-- [ ] Ekspor connector dari `src/index.ts`.
+- [x] **Riset endpoint OAuth Blibli** (authorize + token) — temuan: API saat ini
+      (`seller-api.blibli.com`) **tokenless** (Basic `clientKey:clientSecret` + header
+      `Api-Seller-Key`; release resmi Java client: "it's tokenless, no need to maintain token
+      anymore"). Tidak ada authorize/token/refresh endpoint. OAuth hanya di MTA lama (v3.x,
+      deprecated, host `api-uata.gdn-app.com/v2/oauth/token`, body `{apiUsername, apiPassword,
+      mtaUsername, mtaPassword, platformName, refreshToken?}` → `{access_token, refresh_token}`,
+      business call via `/v2/proxy/mta/...`) — host & skema proxy berbeda dari endpoint SDK ini.
+      **Keputusan (disetujui user): adaptasi key-based** — kontrak seragam dipertahankan, tapi
+      `buildAuthUrl`/`handleCallback`/`refresh` lempar error jelas & registrasi via
+      `connect(shopId, apiSellerKey)`. Detail di `sdk/src/connector/connector.ts`.
+- [x] `connector/types.ts` — `TokenSet` (accessToken = apiSellerKey, tanpa expiry), `BlibliConnectorConfig`
+      (credentials/redirectUri/store/environment/fetch); `redirectUri` dipertahankan utk kontrak seragam.
+- [x] `connector/token-store.ts` — `interface TokenStore` + `InMemoryTokenStore` (dengan `keys()`).
+- [x] `connector/connector.ts` — class `BlibliConnector` (multi-seller):
+  - `buildAuthUrl(shopId, state?)` & `handleCallback(shopId, code)` → lempar `BlibliError` jelas
+    (Blibli tidak pakai OAuth).
+  - `refresh(shopId)` → lempar jelas (key tidak kedaluwarsa).
+  - `connect(shopId, apiSellerKey)` → simpan TokenSet (pengganti `handleCallback`).
+  - `getClient(shopId)` (async) → `BlibliClient` ter-inject apiSellerKey per shop.
+  - `listShopIds()` — union dari `keys()` store + Set internal connector.
+- [x] `connector/index.ts` — `createBlibliConnector(config)`.
+- [x] Ekspor connector dari `src/index.ts` (`export * from './connector'`).
 
 ## Fase 2 — OAuth dari nol + token injection di client
 
