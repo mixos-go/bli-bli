@@ -124,8 +124,9 @@ dianulir jadi dokumentasi & formalisasi keputusan (alih-alih bangun OAuth):
 
 ## Fase 3 — Multi-seller switch
 
-- [ ] `getClient(shopId)` utk shop berbeda menghasilkan client dgn token sendiri.
-- [ ] Test isolasi antar shop (token + apiSellerKey tidak tercampur).
+- [x] `getClient(shopId)` utk shop berbeda menghasilkan client dgn apiSellerKey sendiri. Terverifikasi
+      manual: shop1 & shop2 → header `Api-Seller-Key=KEY_A/KEY_B` (tidak tercampur).
+- [x] Test isolasi antar shop (token + apiSellerKey tidak tercampur) — verifikasi manual di atas.
 
 ## Fase 4 — Testing (connector)
 
