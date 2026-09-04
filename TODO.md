@@ -144,7 +144,7 @@ dianulir jadi dokumentasi & formalisasi keputusan (alih-alih bangun OAuth):
 - [x] Update `sdk/README.md`: jelaskan auth terbaru — bagian **Connector multi-seller
       (key-based, tanpa OAuth)** (Basic + `Api-Seller-Key`, `connect(shopId, apiSellerKey)`).
 - [x] Update `SKILL.md`: catatan "tanpa OAuth untuk API seller" agar tidak mencari flow OAuth.
-- [ ] Bump version + publish ke GitHub Packages (ditunda: butuh kredensial publish).
+- [x] Bump version ke 1.1.0 + publish ke GitHub Packages (@mixos-go/bli-bli-sdk@1.1.0).
 
 ---
 
