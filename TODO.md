@@ -141,10 +141,10 @@ dianulir jadi dokumentasi & formalisasi keputusan (alih-alih bangun OAuth):
 
 ## Fase 5 — Docs & release
 
-- [ ] Update `sdk/README.md`: jelaskan 2 mode auth — (1) Basic legacy, (2) OAuth connector
-      (access/refresh token, multi-seller).
-- [ ] Update `SKILL.md`/doc referensi OAuth Blibli jika perlu.
-- [ ] Bump version + publish ke GitHub Packages.
+- [x] Update `sdk/README.md`: jelaskan auth terbaru — bagian **Connector multi-seller
+      (key-based, tanpa OAuth)** (Basic + `Api-Seller-Key`, `connect(shopId, apiSellerKey)`).
+- [x] Update `SKILL.md`: catatan "tanpa OAuth untuk API seller" agar tidak mencari flow OAuth.
+- [ ] Bump version + publish ke GitHub Packages (ditunda: butuh kredensial publish).
 
 ---
 

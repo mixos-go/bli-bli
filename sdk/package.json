@@ -1,6 +1,6 @@
 {
   "name": "@mixos-go/bli-bli-sdk",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Generated TypeScript SDK for the Blibli Seller API (MTA) - 131 callable APIs / 27 categories",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

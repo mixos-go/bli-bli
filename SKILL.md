@@ -23,6 +23,10 @@ guessing fields.
   `### Header`, `### Parameter`, `### Sectioning`, and parameter/response tables.
 - Webhook APIs (service 79 categories) document push notification payloads and
   headers (Authorization basic auth, requestId, requestTime, token, Signature).
+- Blibli Seller API saat ini **tanpa OAuth** (tokenless): auth = HTTP Basic
+  (`clientKey:clientSecret`) + header `Api-Seller-Key` (+ opsional signature).
+  Jangan mencari flow OAuth/refresh token di API seller; connector SDK
+  menyesuaikan key-based (`connect(shopId, apiSellerKey)`), lihat `sdk/README.md`.
 
 ## Workflow
 
