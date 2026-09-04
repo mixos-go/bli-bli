@@ -130,12 +130,14 @@ dianulir jadi dokumentasi & formalisasi keputusan (alih-alih bangun OAuth):
 
 ## Fase 4 — Testing (connector)
 
-- [ ] Unit test `TokenStore`.
-- [ ] Unit test `BlibliConnector` pakai mock (tanpa hit API asli): buildAuthUrl, handleCallback
-      (parse token + expire), refresh, auto-refresh, error path.
-- [ ] Unit test token injection di `BlibliClient.request()` (Basic tetap jalan + Bearer opsional).
-- [ ] Unit test isolasi multi-seller.
-- [ ] Smoke test signing & auth Basic tetap hijau (jangan rusak `sign()` & flow eksisting).
+- [x] Unit test `TokenStore` (in-memory get/set/delete/keys).
+- [x] Unit test `BlibliConnector` pakai mock — `sdk/test/connector.test.cjs` (`npm test`,
+      node:test, 10 test hijau): `buildAuthUrl`/`handleCallback`/`refresh` lempar `BlibliError`
+      jelas (key-based, tanpa OAuth); `connect(shopId, apiSellerKey)` simpan key.
+- [x] Unit test token injection di `BlibliClient.request()`: Basic (`Authorization`) tetap jalan +
+      `Api-Seller-Key` per shop + signature opsional (`Signature`/`Signature-Time`).
+- [x] Unit test isolasi multi-seller (2 shop, `Api-Seller-Key` tidak saling timpa).
+- [x] Smoke test signing & auth Basic tetap hijau (`npm run smoke` pass; test `sign()` base64).
 
 ## Fase 5 — Docs & release
 
