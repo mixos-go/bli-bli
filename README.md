@@ -1,7 +1,6 @@
 # bli-bli — Blibli Seller API skill
 
-Skill mandiri ala pola `@tts-open-toolkit`/`tts-openapi-*` dari TikTok Shop, tapi
-untuk Blibli Seller API. Struktur identik dengan skill toolkit:
+Skill mandiri (standalone) untuk Blibli Seller API. Struktur identik dengan skill toolkit:
 
 ```
 bli-bli/
